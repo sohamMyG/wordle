@@ -1,0 +1,34 @@
+:root{
+  --cell-height: 50px
+}
+
+body{
+  margin: 0;
+  text-align: center;
+  font-family: "Clear Sans";
+}
+
+header{
+  margin: 20px;
+}
+
+.header-title{
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.cell{
+  height: var(--cell-height);
+  width:  var(--cell-height);
+  border: 1px solid #aaa;
+  margin: 3px;
+  line-height: 40px;
+  font-size:40px;
+  font-weight: bold;
+}
+
+.row{
+  display: flex;
+  justify-content: center;
+
+}
