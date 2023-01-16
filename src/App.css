@@ -1,5 +1,5 @@
 :root{
-  --cell-height: 50px
+  --cell-height: 60px
 }
 
 body{
@@ -10,6 +10,10 @@ body{
 
 header{
   margin: 20px;
+  position: relative;
+}
+header div{
+  display: inline-block;
 }
 
 .header-title{
@@ -22,7 +26,7 @@ header{
   width:  var(--cell-height);
   border: 1px solid #aaa;
   margin: 3px;
-  line-height: 40px;
+  line-height: 55px;
   font-size:40px;
   font-weight: bold;
 }
@@ -30,5 +34,43 @@ header{
 .row{
   display: flex;
   justify-content: center;
+}
+
+
+label {
+width:60px;
+height:30px;
+position: relative;
+display: block;
+background: #ebebeb;
+border-radius: 25px;
+cursor: pointer;
+}
+label:after {
+content: "";
+width:20px;
+height: 20px;
+position: absolute;
+top:5px;
+left:5px;
+background: #666;
+border-radius: 25px;
 
 }
+input {
+width: 0;
+height: 0;
+visibility: hidden;
+}
+
+input:checked + label {
+background: #242424;
+}
+input:checked + label:after {
+left:35px; 
+background:#ebebeb
+}
+label, label:after {
+transition: 0.3s
+}
+

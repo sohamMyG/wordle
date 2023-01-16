@@ -26,7 +26,7 @@ const Grid = ({tries,guess})=> {
     }
   }
   
-  return <div>{grid}</div>
+  return <div style={{marginBottom:'30px'}}>{grid}</div>
 }
 
 const Row = ({word,tried}) => {
@@ -56,10 +56,68 @@ const Row = ({word,tried}) => {
   return <div className='row' >{row}</div>
 }
 
+const DarkModeToggler = () => {
+  
+  const style = {
+    
+  }
+  return (
+    <div style={{position:'absolute',right:'10px',top:'-15px'}}>
+      <input type="checkbox" id="darkmode-toggle"/>
+      <label htmlFor="darkmode-toggle"></label>
+    </div>
+    
+  )
+}
+
+const Keyboard = ({kbColors}) => {
+  const keyboard = []
+  const Row = ({cells})=>{
+    
+    const row=[]
+    let bgColor
+    for(let char in cells){
+      if(cells[char] in kbColors){
+        bgColor = kbColors[cells[char]]
+      }
+      else{
+        bgColor = '#d6d6d6'
+      }
+      console.log(bgColor, kbColors)
+      row.push(
+        <div 
+          key={char}
+          style={{
+            display:'flex',
+            alignItems:'center',
+            justifyContent:'center',
+            height:'60px',
+            width:'40px',
+            borderRadius:'5px',
+            backgroundColor:bgColor,
+            margin:'3px',
+            padding:'0 10px'
+          }}
+        >
+          {cells[char].toUpperCase()}
+        </div>
+      )
+    }
+    return <div style={{display:'flex',justifyContent:'center'}}>{row}</div>
+  }
+
+  keyboard.push(<Row key={1} cells={['q','w','e','r','t','y','u','i','o','p']}/>)
+  keyboard.push(<Row key={2} cells={['a','s','d','f','g','h','j','k','l']}/>)
+  keyboard.push(<Row key={3} cells={['enter','z','x','c','v','b','n','m','bksp']}/>)
+
+  return <div>{keyboard}</div>
+
+}
+
 const App= ()=> {
   const [guess, setGuess] = useState("")
   const [tries, setTries] = useState([
-    'golum'
+    
   ])
   const [colors,setColors] = useState({})
   
@@ -81,6 +139,9 @@ const App= ()=> {
   const handleKeydown = (e)=> {
     
     const key=e.key.toLowerCase()
+    if (e.ctrlKey || e.shiftKey || e.altKey) {
+      return
+    }
     if(key==='enter'){
       if(guess.length<5){return}
       if(tries.length>=6){return}
@@ -102,12 +163,15 @@ const App= ()=> {
     }
   }
   
+
   return (
     <div className="App">
       <header>
         <div className='header-title'>Wordle</div>
+        <DarkModeToggler />
       </header>
       <Grid tries={tries} guess={guess} colors={colors}/>
+      <Keyboard kbColors={getKBColor(tries)}/>
     </div>
   )
 }
@@ -131,21 +195,20 @@ const getBgColor= (word,i) => {
 
 const getKBColor = (tries) =>{
 
-  let colors = []
+  let colors = {}
   for(let word of tries){
-    let color={}
     for(let i=0;i<word.length;i++){
       if(answer[i]===word[i]){
-        color[word[i]]='#6aaa64'
+        colors[word[i]]='#6aaa64'
       }
       else if(answer.includes(word[i])){
-        color[word[i]]='#c9b458'
+        colors[word[i]]='#c9b458'
       }
       else{
-        color[word[i]]='#787c7e'
+        colors[word[i]]='#888888'
       }
     }
-    colors.push(color)
+    
   }
   return colors
 }
