@@ -8,8 +8,12 @@ body{
   font-family: "Clear Sans";
 }
 
+.appContainer{
+  height: 100vh;
+}
+
 header{
-  margin: 20px;
+  padding: 20px 0;
   position: relative;
 }
 header div{
@@ -38,39 +42,46 @@ header div{
 
 
 label {
-width:60px;
-height:30px;
-position: relative;
-display: block;
-background: #ebebeb;
-border-radius: 25px;
-cursor: pointer;
+  width:60px;
+  height:30px;
+  position: relative;
+  display: block;
+  background: #ebebeb;
+  border-radius: 25px;
+  cursor: pointer;
 }
 label:after {
-content: "";
-width:20px;
-height: 20px;
-position: absolute;
-top:5px;
-left:5px;
-background: #666;
-border-radius: 25px;
+  content: "";
+  width:20px;
+  height: 20px;
+  position: absolute;
+  top:5px;
+  left:5px;
+  background: #666;
+  border-radius: 25px;
 
 }
 input {
-width: 0;
-height: 0;
-visibility: hidden;
+  width: 0;
+  height: 0;
+  visibility: hidden;
 }
 
 input:checked + label {
-background: #242424;
+  background: #242424;
 }
 input:checked + label:after {
-left:35px; 
-background:#ebebeb
+  left:35px; 
+  background:#ebebeb
 }
 label, label:after {
-transition: 0.3s
+  transition: 0.3s
+}
+.darkmode{
+  background-color: #111;
+  color: #fff;
+}
+.darkmode{
+
 }
 

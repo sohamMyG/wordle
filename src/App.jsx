@@ -56,21 +56,33 @@ const Row = ({word,tried}) => {
   return <div className='row' >{row}</div>
 }
 
-const DarkModeToggler = () => {
+const DarkModeToggler = ({darkmode,setDarkmode}) => {
   
   const style = {
-    
+    position:'absolute',
+    right:'30px',
+    top: '5px'
   }
+
+  const handleChange = () => {
+    if(darkmode){
+      setDarkmode(false)
+    }
+    else{
+      setDarkmode(true)
+    }
+  }
+
   return (
-    <div style={{position:'absolute',right:'10px',top:'-15px'}}>
-      <input type="checkbox" id="darkmode-toggle"/>
+    <div style={style}>
+      <input checked={darkmode} onChange={handleChange} type="checkbox" id="darkmode-toggle"/>
       <label htmlFor="darkmode-toggle"></label>
     </div>
     
   )
 }
 
-const Keyboard = ({kbColors}) => {
+const Keyboard = ({kbColors,darkmode}) => {
   const keyboard = []
   const Row = ({cells})=>{
     
@@ -83,22 +95,21 @@ const Keyboard = ({kbColors}) => {
       else{
         bgColor = '#d6d6d6'
       }
-      console.log(bgColor, kbColors)
+      const style={
+        display:'flex',
+        alignItems:'center',
+        justifyContent:'center',
+        height:'60px',
+        width:'40px',
+        borderRadius:'5px',
+        backgroundColor:bgColor,
+        margin:'3px',
+        padding:'0 10px',
+        color:'#111'
+      }
+      // console.log(bgColor, kbColors)
       row.push(
-        <div 
-          key={char}
-          style={{
-            display:'flex',
-            alignItems:'center',
-            justifyContent:'center',
-            height:'60px',
-            width:'40px',
-            borderRadius:'5px',
-            backgroundColor:bgColor,
-            margin:'3px',
-            padding:'0 10px'
-          }}
-        >
+        <div key={char} style={style}>
           {cells[char].toUpperCase()}
         </div>
       )
@@ -120,7 +131,7 @@ const App= ()=> {
     
   ])
   const [colors,setColors] = useState({})
-  
+  const [darkmode,setDarkmode] = useState(false)
 
   useEffect(()=>{  
     window.addEventListener('keydown' ,handleKeydown)
@@ -165,13 +176,13 @@ const App= ()=> {
   
 
   return (
-    <div className="App">
+    <div className={ 'appContainer ' +(darkmode ? 'darkmode':'')}>
       <header>
         <div className='header-title'>Wordle</div>
-        <DarkModeToggler />
+        <DarkModeToggler darkmode={darkmode} setDarkmode={setDarkmode}/>
       </header>
       <Grid tries={tries} guess={guess} colors={colors}/>
-      <Keyboard kbColors={getKBColor(tries)}/>
+      <Keyboard kbColors={getKBColor(tries)} darkmode={darkmode}/>
     </div>
   )
 }
