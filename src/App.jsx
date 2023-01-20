@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
-const Grid = ({tries,guess})=> {
+const Grid = ({tries,guess,getBgColor})=> {
   
   let grid= []
   for(let i=0;i<6;i++){
@@ -11,6 +11,7 @@ const Grid = ({tries,guess})=> {
           word={tries[i]} 
           style={{backgroundColor:'white'}}  
           tried={true} //tried shows if tries includes word
+          getBgColor={getBgColor}
         />
       )
     }
@@ -29,7 +30,7 @@ const Grid = ({tries,guess})=> {
   return <div style={{marginBottom:'30px'}}>{grid}</div>
 }
 
-const Row = ({word,tried}) => {
+const Row = ({word,tried,getBgColor}) => {
   let row=[]
   for(let i=0;i<5;i++){
     if((i<word.length)){
@@ -125,13 +126,18 @@ const Keyboard = ({kbColors,darkmode}) => {
 
 }
 
+
+
 const App= ()=> {
+  
+  const answerList = ['lotus','water','flame']
   const [guess, setGuess] = useState("")
-  const [tries, setTries] = useState([
-    
-  ])
+  const [tries, setTries] = useState([])
   const [colors,setColors] = useState({})
   const [darkmode,setDarkmode] = useState(false)
+  const [answer,setAnswer] = useState(answerList[Math.floor(Math.random()*answerList.length)])
+  
+
 
   useEffect(()=>{  
     window.addEventListener('keydown' ,handleKeydown)
@@ -141,14 +147,10 @@ const App= ()=> {
     }
   },[guess])
 
-  //update colors whenever tries updates
-  useEffect(()=>{
-    setColors(getBgColor(tries))
-    
-  },[tries])
-
   const handleKeydown = (e)=> {
     
+    if(tries.includes(answer)){return}
+
     const key=e.key.toLowerCase()
     if (e.ctrlKey || e.shiftKey || e.altKey) {
       return
@@ -159,7 +161,7 @@ const App= ()=> {
       
       setTries([...tries,guess])
       setGuess('')
-            
+
     }
     else if(key==='backspace'){
       console.log(key)
@@ -173,7 +175,41 @@ const App= ()=> {
       }
     }
   }
+
+  const getBgColor= (word,i) => {
+    let color
+    if(answer[i]===word[i]){
+      color='#6aaa64'
+    }
+    else if(answer.includes(word[i])){
+      color='#c9b458'
+    }
+    else{
+      color='#787c7e'
+    }
+    return color
+  }
   
+  const getKBColor = (tries) =>{
+  
+    let colors = {}
+    for(let word of tries){
+      for(let i=0;i<word.length;i++){
+        if(answer[i]===word[i]){
+          colors[word[i]]='#6aaa64'
+        }
+        else if(answer.includes(word[i])){
+          colors[word[i]]='#c9b458'
+        }
+        else{
+          colors[word[i]]='#888888'
+        }
+      }
+      
+    }
+    return colors
+  }
+
 
   return (
     <div className={ 'appContainer ' +(darkmode ? 'darkmode':'')}>
@@ -181,49 +217,11 @@ const App= ()=> {
         <div className='header-title'>Wordle</div>
         <DarkModeToggler darkmode={darkmode} setDarkmode={setDarkmode}/>
       </header>
-      <Grid tries={tries} guess={guess} colors={colors}/>
+      <Grid tries={tries} guess={guess} colors={colors} getBgColor={getBgColor}/>
       <Keyboard kbColors={getKBColor(tries)} darkmode={darkmode}/>
     </div>
   )
 }
-
-let words=['lotus']
-const answer = words[Math.floor(Math.random()*words.length)]
-
-const getBgColor= (word,i) => {
-  let color
-  if(answer[i]===word[i]){
-    color='#6aaa64'
-  }
-  else if(answer.includes(word[i])){
-    color='#c9b458'
-  }
-  else{
-    color='#787c7e'
-  }
-  return color
-}
-
-const getKBColor = (tries) =>{
-
-  let colors = {}
-  for(let word of tries){
-    for(let i=0;i<word.length;i++){
-      if(answer[i]===word[i]){
-        colors[word[i]]='#6aaa64'
-      }
-      else if(answer.includes(word[i])){
-        colors[word[i]]='#c9b458'
-      }
-      else{
-        colors[word[i]]='#888888'
-      }
-    }
-    
-  }
-  return colors
-}
-
 
 
 export default App
